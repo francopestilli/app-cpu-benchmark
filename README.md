@@ -1,5 +1,45 @@
 # CPU Scaling Benchmark
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Utility that benchmarks CPU scaling of a fixed PBKDF2 SHA-256 workload across configurable worker counts and reports runtime, speedup, CPU utilisation and memory in an HTML report.**
+
+Runs a fixed number of deterministic work items with Python multiprocessing at each requested worker count, repeating trials in shuffled order, and verifies results while recording wall time, CPU use and memory. Use it to check how many cores a brainlife compute resource effectively provides; it is not a neuroimaging analysis. The T1w input is a required placeholder and is never read.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/anat/t1w` |
+| 📤 **Outputs** | `report/html` |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.977](https://doi.org/10.25663/brainlife.app.977) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `t1w` | `neuro/anat/t1w` | yes | Required placeholder T1w input for Brainlife app selection. The benchmark does not read or use this image. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `report` | `report/html` | CPU scaling report with downloadable JSON and CSV |
+
+<details>
+<summary><b>⚙️ Parameters</b> (6)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `workers` | string | `1,2,4,8,16` | Comma-separated worker process counts. Include 1 for baseline. Max 64; values above the resource CPU allocation test oversubscription, not larger instances. |
+| `tasks` | number | `64` | Fixed number of independent work items per trial. Must be at least the largest worker count. |
+| `iterations` | number | `200000` | PBKDF2 SHA-256 iterations per work item. Increase to reduce process-startup overhead relative to computation. |
+| `repeats` | number | `3` | Trials per worker count. Order is shuffled reproducibly each round. |
+| `memory_mb_per_worker` | number | `16` | MiB allocated and page-touched per worker. Initialization is included in wall time. Not a memory-bandwidth test. |
+| `seed` | number | `42` | Deterministic workload and trial-order seed; use the same seed across comparisons. |
+
+</details>
+
+<!-- brainlife-app:end -->
+
 A Brainlife app for benchmarking **fixed total work** across CPU worker counts. Designed for the Heavy CPU resource (16 vCPUs / 28 GiB job RAM), but usable on any Python 3 Linux resource.
 
 ## Quick start
